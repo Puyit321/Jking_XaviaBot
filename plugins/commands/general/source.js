@@ -16,7 +16,7 @@ const langData = {
     }
 }
 
-const source = "https://github.com/XaviaTeam/XaviaBot";
+const source = "https://github.com/";
 function onCall({ message, getLang }) {
     message.reply(getLang("details", { source }));
 }
