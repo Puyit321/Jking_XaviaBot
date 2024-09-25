@@ -17,7 +17,7 @@ const previousResponses = new Map(); // Map to store previous responses for each
 async function onCall({ message, args }) {
     const id = message.senderID; // User ID
     if (!args.length) {
-        message.reply("•| 𝙱𝙾𝙶𝙰𝚁𝚃 𝙰𝙸 𝙱𝙾𝚃 |•\n\nHello! How can I assist you today?\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
+        message.reply("•| 𝙱𝙾𝙶𝙰𝚁𝚃 𝙰𝙸 𝙱𝙾𝚃 |•\n\nHello! How can I assist you today?\n\n•| 𝙾𝚆𝙽𝙴𝚁 : 𝙷𝙾𝙼𝙴𝚁 𝚁𝙴𝙱𝙰𝚃𝙸𝚂 |•");
         return;
     }
 
@@ -43,7 +43,7 @@ async function onCall({ message, args }) {
         // Extract the reply from the response
         if (response.data && response.data.result && response.data.result.reply) {
             const gptResponse = response.data.result.reply;
-            await message.send(`ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n${gptResponse}\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”`);
+            await message.send(`ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n${gptResponse}\n\n`);
 
             // Store the response for follow-up
             previousResponses.set(id, gptResponse);
