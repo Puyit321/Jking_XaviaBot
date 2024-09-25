@@ -43,12 +43,12 @@ async function onCall({ message, args }) {
         // Extract the reply from the response
         if (response.data && response.data.result && response.data.result.reply) {
             const gptResponse = response.data.result.reply;
-            await message.send(`ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n${gptResponse}\n\n`);
+            await message.send(`•| 𝙱𝙾𝙶𝙰𝚁𝚃 𝙰𝙸 𝙱𝙾𝚃 |•\n\n${gptResponse}\n\n•| 𝙾𝚆𝙽𝙴𝚁 : 𝙷𝙾𝙼𝙴𝚁 𝚁𝙴𝙱𝙰𝚃𝙸𝚂 |•`);
 
             // Store the response for follow-up
             previousResponses.set(id, gptResponse);
         } else {
-            await message.send("ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\nError: Unexpected response format from API.\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
+            await message.send("•| 𝙱𝙾𝙶𝙰𝚁𝚃 𝙰𝙸 𝙱𝙾𝚃 |•\n\nError: Unexpected response format from API.\n\n•| 𝙾𝚆𝙽𝙴𝚁 : 𝙷𝙾𝙼𝙴𝚁 𝚁𝙴𝙱𝙰𝚃𝙸𝚂 |•");
         }
     } catch (error) {
         // Log the error for debugging
