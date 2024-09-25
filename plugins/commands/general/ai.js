@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const config = {
-    name: "gpt",
+    name: "ai",
     aliases: ["chatgpt"],
     description: "Ask a question to the GPT",
     usage: "[query]",
