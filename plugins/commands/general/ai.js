@@ -17,7 +17,7 @@ const previousResponses = new Map(); // Map to store previous responses for each
 async function onCall({ message, args }) {
     const id = message.senderID; // User ID
     if (!args.length) {
-        message.reply("ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\nHello! How can I assist you today?\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
+        message.reply("•| 𝙱𝙾𝙶𝙰𝚁𝚃 𝙰𝙸 𝙱𝙾𝚃 |•\n\nHello! How can I assist you today?\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
         return;
     }
 
