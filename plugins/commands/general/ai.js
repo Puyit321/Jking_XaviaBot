@@ -1,57 +1,63 @@
-import axios from 'axios'; // Make sure to install axios if not installed
+import axios from 'axios';
 
 const config = {
-    name: "ai",
-    aliases: ["chat", "gpt"],
-    description: "Interact with GPT-4 via API",
+    name: "gpt",
+    aliases: ["chatgpt"],
+    description: "Ask a question to the GPT",
     usage: "[query]",
     cooldown: 3,
-    permissions: [0], // General users can access
+    permissions: [0, 1, 2],
     isAbsolute: false,
     isHidden: false,
-    credits: "XaviaTeam",
+    credits: "RN",
 };
 
-const langData = {
-    "lang_1": {
-        "message": "Please provide a prompt to interact with the AI.",
-    },
-    "lang_2": {
-        "message": "Kailangan mo magbigay ng prompt para makipag-ugnayan sa AI.",
-    }
-};
+const previousResponses = new Map(); // Map to store previous responses for each user
 
-async function onCall({ message, args, getLang, data, userPermissions, prefix }) {
-    if (args.length === 0) {
-        // If no arguments (prompt) are provided, send a message back.
-        return message.send(getLang("message"));
+async function onCall({ message, args }) {
+    const id = message.senderID; // User ID
+    if (!args.length) {
+        message.reply("ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\nHello! How can I assist you today?\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
+        return;
     }
 
-    const input = args.join(" "); // Combine arguments into a single prompt
-    const userId = data.user?.id || 100; // User ID from data or default to 100
+    let query = args.join(" ");
+    const previousResponse = previousResponses.get(id); // Get the previous response for the user
+
+    // If there's a previous response, handle it as a follow-up
+    if (previousResponse) {
+        query = `Follow-up on: "${previousResponse}"\nUser reply: "${query}"`;
+    }
 
     try {
-        // Use axios to make the API request
-        const { data } = await axios.get('https://gpt4-api-zl5u.onrender.com/api/gpt4o', {
-            params: {
-                prompt: input,
-                uid: userId
-            }
-        });
+        const typ = global.api.sendTypingIndicator(message.threadID);
 
-        if (data && data.response) {
-            message.send(data.response); // Send AI's response to the user
+        // Send request to the API with the query
+        const response = await axios.get(`https://deku-rest-api.gleeze.com/new/gpt-3_5-turbo?prompt=${encodeURIComponent(query)}`);
+
+        typ();
+
+        // Log the response to check its structure
+        console.log("API response: ", response.data);
+
+        // Extract the reply from the response
+        if (response.data && response.data.result && response.data.result.reply) {
+            const gptResponse = response.data.result.reply;
+            await message.send(`ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n${gptResponse}\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”`);
+
+            // Store the response for follow-up
+            previousResponses.set(id, gptResponse);
         } else {
-            message.send("Sorry, I couldn't understand the response from the AI.");
+            await message.send("ðŸ—¨ï¸âœ¨ | ð™²ðš‘ðšŠðšð™¶ð™¿ðšƒ\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\nError: Unexpected response format from API.\nâ”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”");
         }
     } catch (error) {
-        message.send("An error occurred while trying to reach the AI. Please try again later.");
-        console.error("Error while calling AI API:", error);
+        // Log the error for debugging
+        console.error("API call failed: ", error);
+        message.react(`âŽ`);
     }
 }
 
 export default {
     config,
-    langData,
     onCall
 };
